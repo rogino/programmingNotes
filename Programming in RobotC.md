@@ -140,9 +140,9 @@ int age = 10;
 type variableName = variableValue;
 ```
 
-You define a variable by having the type of it, in this case, `int`, then the name of it: `age` in this case- this is what you will refer to to access it-. You should use a descriptive name** for this so you know what kind of information is stored such as the age of someone- having it named `pineapple` isn't too helpful. Next is the `=` sign: you want age to equal a number, which is the 4th part, the `10`. Finally, you need to end it with a semicolon `;` to tell the computer to finish that instruction.
+You define a variable by having the type of it, in this case, `int`, then the name of it: `age` in this case- this is what you will refer to to access it-. You should use a descriptive name for this so you know what kind of information is stored such as the age of someone- having it named `pineapple` isn't too helpful. Next is the `=` sign: you want age to equal a number, which is the 4th part, the `10`. Finally, you need to end it with a semicolon `;` to tell the computer to finish that instruction.
 
-**you cannot have a space in the name, start it with a number and have other restrictions.
+Note: you cannot have a space in the name of the variable, start it with a digit, and there are other character restrictions.
 
 You can change the value of the variables after you define them:
 
