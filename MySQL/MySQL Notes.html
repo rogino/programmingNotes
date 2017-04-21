@@ -1,0 +1,637 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+<title>MySQL Notes.md</title><link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext' rel='stylesheet' type='text/css' /><style type='text/css'>html {overflow-x: initial !important;}.CodeMirror { height: auto; }
+.CodeMirror-scroll { overflow-y: hidden; overflow-x: auto; }
+.CodeMirror-lines { padding: 4px 0px; }
+.CodeMirror pre { }
+.CodeMirror-scrollbar-filler, .CodeMirror-gutter-filler { background-color: white; }
+.CodeMirror-gutters { border-right: 1px solid rgb(221, 221, 221); background-color: rgb(247, 247, 247); white-space: nowrap; }
+.CodeMirror-linenumbers { }
+.CodeMirror-linenumber { padding: 0px 3px 0px 5px; text-align: right; color: rgb(153, 153, 153); }
+.CodeMirror div.CodeMirror-cursor { border-left: 1px solid black; z-index: 3; }
+.CodeMirror div.CodeMirror-secondarycursor { border-left: 1px solid silver; }
+.CodeMirror.cm-keymap-fat-cursor div.CodeMirror-cursor { width: auto; border: 0px; background: rgb(119, 238, 119); z-index: 1; }
+.CodeMirror div.CodeMirror-cursor.CodeMirror-overwrite { }
+.cm-tab { display: inline-block; }
+.cm-s-typora-default .cm-header, .cm-s-typora-default .cm-property { color: rgb(217, 79, 138); }
+.cm-s-typora-default pre.cm-header1:not(.cm-atom) :not(.cm-overlay) { font-size: 2rem; line-height: 2rem; }
+.cm-s-typora-default pre.cm-header2:not(.cm-atom) :not(.cm-overlay) { font-size: 1.4rem; line-height: 1.4rem; }
+.cm-s-typora-default .cm-atom, .cm-s-typora-default .cm-number { color: rgb(149, 132, 134); }
+.cm-s-typora-default .cm-table-row, .cm-s-typora-default .cm-block-start { font-family: monospace; }
+.cm-s-typora-default .cm-comment, .cm-s-typora-default .cm-code { color: rgb(74, 90, 159); font-family: monospace; }
+.cm-s-typora-default .cm-tag { color: rgb(169, 68, 66); }
+.cm-s-typora-default .cm-string { color: rgb(126, 134, 169); }
+.cm-s-typora-default .cm-link { color: rgb(196, 122, 15); text-decoration: underline; }
+.cm-s-typora-default .cm-variable-2, .cm-s-typora-default .cm-variable-1 { color: inherit; }
+.cm-s-typora-default .cm-overlay { font-size: 1rem; font-family: monospace; }
+.CodeMirror.cm-s-typora-default div.CodeMirror-cursor { border-left: 3px solid rgb(228, 98, 154); }
+.cm-s-typora-default .CodeMirror-activeline-background { left: -60px; right: -30px; background: rgba(204, 204, 204, 0.2); }
+.cm-s-typora-default .CodeMirror-gutters { border-right: none; background-color: inherit; }
+.cm-s-typora-default .cm-trailing-space-new-line::after, .cm-startspace::after, .cm-starttab .cm-tab::after { content: "•"; position: absolute; left: 0px; opacity: 0; font-family: LetterGothicStd, monospace; }
+.os-windows .cm-startspace::after, .os-windows .cm-starttab .cm-tab::after { left: -0.1em; }
+.cm-starttab .cm-tab::after { content: " "; }
+.cm-startspace, .cm-tab, .cm-starttab, .cm-trailing-space-a, .cm-trailing-space-b, .cm-trailing-space-new-line { font-family: monospace; position: relative; }
+.cm-s-typora-default .cm-trailing-space-new-line::after { content: "↓"; opacity: 0.3; }
+.cm-s-inner .cm-keyword { color: rgb(119, 0, 136); }
+.cm-s-inner .cm-atom, .cm-s-inner.cm-atom { color: rgb(34, 17, 153); }
+.cm-s-inner .cm-number { color: rgb(17, 102, 68); }
+.cm-s-inner .cm-def { color: rgb(0, 0, 255); }
+.cm-s-inner .cm-variable { color: black; }
+.cm-s-inner .cm-variable-2 { color: rgb(0, 85, 170); }
+.cm-s-inner .cm-variable-3 { color: rgb(0, 136, 85); }
+.cm-s-inner .cm-property { color: black; }
+.cm-s-inner .cm-operator { color: rgb(152, 26, 26); }
+.cm-s-inner .cm-comment, .cm-s-inner.cm-comment { color: rgb(170, 85, 0); }
+.cm-s-inner .cm-string { color: rgb(170, 17, 17); }
+.cm-s-inner .cm-string-2 { color: rgb(255, 85, 0); }
+.cm-s-inner .cm-meta { color: rgb(85, 85, 85); }
+.cm-s-inner .cm-qualifier { color: rgb(85, 85, 85); }
+.cm-s-inner .cm-builtin { color: rgb(51, 0, 170); }
+.cm-s-inner .cm-bracket { color: rgb(153, 153, 119); }
+.cm-s-inner .cm-tag { color: rgb(17, 119, 0); }
+.cm-s-inner .cm-attribute { color: rgb(0, 0, 204); }
+.cm-s-inner .cm-header, .cm-s-inner.cm-header { color: blue; }
+.cm-s-inner .cm-quote, .cm-s-inner.cm-quote { color: rgb(0, 153, 0); }
+.cm-s-inner .cm-hr, .cm-s-inner.cm-hr { color: rgb(153, 153, 153); }
+.cm-s-inner .cm-link, .cm-s-inner.cm-link { color: rgb(0, 0, 204); }
+.cm-negative { color: rgb(221, 68, 68); }
+.cm-positive { color: rgb(34, 153, 34); }
+.cm-header, .cm-strong { font-weight: bold; }
+.cm-del { text-decoration: line-through; }
+.cm-em { font-style: italic; }
+.cm-link { text-decoration: underline; }
+.cm-error { color: rgb(255, 0, 0); }
+.cm-invalidchar { color: rgb(255, 0, 0); }
+.cm-constant { color: rgb(38, 139, 210); }
+.cm-defined { color: rgb(181, 137, 0); }
+div.CodeMirror span.CodeMirror-matchingbracket { color: rgb(0, 255, 0); }
+div.CodeMirror span.CodeMirror-nonmatchingbracket { color: rgb(255, 34, 34); }
+.cm-s-inner .CodeMirror-activeline-background { background: inherit; }
+.CodeMirror { position: relative; overflow: hidden; }
+.CodeMirror-scroll { margin-bottom: -30px; margin-right: -30px; padding-bottom: 30px; padding-right: 30px; height: 100%; outline: none; position: relative; box-sizing: content-box; }
+.CodeMirror-sizer { position: relative; }
+.CodeMirror-vscrollbar, .CodeMirror-hscrollbar, .CodeMirror-scrollbar-filler, .CodeMirror-gutter-filler { position: absolute; z-index: 6; display: none; }
+.CodeMirror-vscrollbar { right: 0px; top: 0px; overflow-x: hidden; overflow-y: scroll; }
+.CodeMirror-hscrollbar { bottom: 0px; left: 0px; overflow-y: hidden; overflow-x: scroll; }
+.CodeMirror-scrollbar-filler { right: 0px; bottom: 0px; }
+.CodeMirror-gutter-filler { left: 0px; bottom: 0px; }
+.CodeMirror-gutters { position: absolute; left: 0px; top: 0px; padding-bottom: 30px; z-index: 3; }
+.CodeMirror-gutter { white-space: normal; height: 100%; box-sizing: content-box; padding-bottom: 30px; margin-bottom: -32px; display: inline-block; }
+.CodeMirror-gutter-elt { position: absolute; cursor: default; z-index: 4; }
+.CodeMirror-lines { cursor: text; }
+.CodeMirror pre { border-radius: 0px; border-width: 0px; background: transparent; font-family: inherit; font-size: inherit; margin: 0px; white-space: pre; word-wrap: normal; color: inherit; z-index: 2; position: relative; overflow: visible; }
+.CodeMirror-wrap pre { word-wrap: break-word; white-space: pre-wrap; word-break: normal; }
+.CodeMirror-code pre { border-right: 30px solid transparent; width: fit-content; }
+.CodeMirror-wrap .CodeMirror-code pre { border-right: none; width: auto; }
+.CodeMirror-linebackground { position: absolute; left: 0px; right: 0px; top: 0px; bottom: 0px; z-index: 0; }
+.CodeMirror-linewidget { position: relative; z-index: 2; overflow: auto; }
+.CodeMirror-widget { }
+.CodeMirror-wrap .CodeMirror-scroll { overflow-x: hidden; }
+.CodeMirror-measure { position: absolute; width: 100%; height: 0px; overflow: hidden; visibility: hidden; }
+.CodeMirror-measure pre { position: static; }
+.CodeMirror div.CodeMirror-cursor { position: absolute; visibility: hidden; border-right: none; width: 0px; }
+.CodeMirror div.CodeMirror-cursor { visibility: hidden; }
+.CodeMirror-focused div.CodeMirror-cursor { visibility: inherit; }
+.CodeMirror-selected { background: rgb(217, 217, 217); }
+.CodeMirror-focused .CodeMirror-selected { background: rgb(215, 212, 240); }
+.cm-searching { background: rgba(255, 255, 0, 0.4); }
+.CodeMirror span { }
+@media print {
+  .CodeMirror div.CodeMirror-cursor { visibility: hidden; }
+}
+.CodeMirror-lint-markers { width: 16px; }
+.CodeMirror-lint-tooltip { background-color: infobackground; border: 1px solid black; border-radius: 4px; color: infotext; font-family: monospace; overflow: hidden; padding: 2px 5px; position: fixed; white-space: pre-wrap; z-index: 10000; max-width: 600px; opacity: 0; transition: opacity 0.4s; font-size: 0.8em; }
+.CodeMirror-lint-mark-error, .CodeMirror-lint-mark-warning { background-position: left bottom; background-repeat: repeat-x; }
+.CodeMirror-lint-mark-error { background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAADCAYAAAC09K7GAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sJDw4cOCW1/KIAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAHElEQVQI12NggIL/DAz/GdA5/xkY/qPKMDAwAADLZwf5rvm+LQAAAABJRU5ErkJggg=="); }
+.CodeMirror-lint-marker-error, .CodeMirror-lint-marker-warning { background-position: center center; background-repeat: no-repeat; cursor: pointer; display: inline-block; height: 16px; width: 16px; vertical-align: middle; position: relative; }
+.CodeMirror-lint-message-error, .CodeMirror-lint-message-warning { padding-left: 18px; background-position: left top; background-repeat: no-repeat; }
+.CodeMirror-lint-marker-error, .CodeMirror-lint-message-error { background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAHlBMVEW7AAC7AACxAAC7AAC7AAAAAAC4AAC5AAD///+7AAAUdclpAAAABnRSTlMXnORSiwCK0ZKSAAAATUlEQVR42mWPOQ7AQAgDuQLx/z8csYRmPRIFIwRGnosRrpamvkKi0FTIiMASR3hhKW+hAN6/tIWhu9PDWiTGNEkTtIOucA5Oyr9ckPgAWm0GPBog6v4AAAAASUVORK5CYII="); }
+.CodeMirror-lint-marker-warning, .CodeMirror-lint-message-warning { background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAANlBMVEX/uwDvrwD/uwD/uwD/uwD/uwD/uwD/uwD/uwD6twD/uwAAAADurwD2tQD7uAD+ugAAAAD/uwDhmeTRAAAADHRSTlMJ8mN1EYcbmiixgACm7WbuAAAAVklEQVR42n3PUQqAIBBFUU1LLc3u/jdbOJoW1P08DA9Gba8+YWJ6gNJoNYIBzAA2chBth5kLmG9YUoG0NHAUwFXwO9LuBQL1giCQb8gC9Oro2vp5rncCIY8L8uEx5ZkAAAAASUVORK5CYII="); }
+.CodeMirror-lint-marker-multiple { background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAMAAADzjKfhAAAACVBMVEUAAAAAAAC/v7914kyHAAAAAXRSTlMAQObYZgAAACNJREFUeNo1ioEJAAAIwmz/H90iFFSGJgFMe3gaLZ0od+9/AQZ0ADosbYraAAAAAElFTkSuQmCC"); background-repeat: no-repeat; background-position: right bottom; width: 100%; height: 100%; }
+
+
+html { font-size: 14px; background-color: rgb(255, 255, 255); color: rgb(51, 51, 51); }
+body { margin: 0px; padding: 0px; height: auto; bottom: 0px; top: 0px; left: 0px; right: 0px; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 1rem; line-height: 1.42857; overflow-x: hidden; background: inherit; }
+a:active, a:hover { outline: 0px; }
+.in-text-selection, ::selection { background: rgb(181, 214, 252); text-shadow: none; }
+#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; word-wrap: break-word; position: relative; padding-bottom: 70px; white-space: pre-wrap; overflow-x: visible; }
+.for-image #write { padding-left: 8px; padding-right: 8px; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+@media screen and (max-width: 500px) {
+  body.typora-export { padding-left: 0px; padding-right: 0px; }
+  .CodeMirror-sizer { margin-left: 0px !important; }
+  .CodeMirror-gutters { display: none !important; }
+}
+.typora-export #write { margin: 0px auto; }
+#write > p:first-child, #write > ul:first-child, #write > ol:first-child, #write > pre:first-child, #write > blockquote:first-child, #write > div:first-child, #write > table:first-child { margin-top: 30px; }
+#write li > table:first-child { margin-top: -20px; }
+img { max-width: 100%; vertical-align: middle; }
+input, button, select, textarea { color: inherit; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: inherit; line-height: inherit; font-family: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+::before, ::after, * { box-sizing: border-box; }
+#write p, #write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write div, #write pre { width: inherit; }
+#write p, #write h1, #write h2, #write h3, #write h4, #write h5, #write h6 { position: relative; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.2rem; }
+h6 { font-size: 1rem; }
+p { -webkit-margin-before: 1rem; -webkit-margin-after: 1rem; -webkit-margin-start: 0px; -webkit-margin-end: 0px; }
+.mathjax-block { margin-top: 0px; margin-bottom: 0px; -webkit-margin-before: 0rem; -webkit-margin-after: 0rem; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: bold; font-style: italic; }
+a { cursor: pointer; }
+sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.701961); color: rgb(85, 85, 85); border-radius: 4px; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; margin: 4px 0px 0px; }
+tr { break-inside: avoid; break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; text-align: left; }
+table.md-table td { min-width: 80px; }
+.CodeMirror-gutters { border-right: 0px; background-color: inherit; }
+.CodeMirror { text-align: left; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+pre { white-space: pre-wrap; }
+.CodeMirror-gutters { margin-right: 4px; }
+.md-fences { font-size: 0.9rem; display: block; break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background: inherit; position: relative !important; }
+.md-diagram-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
+.md-fences .CodeMirror.CodeMirror-wrap { top: -1.6em; margin-bottom: -1.6em; }
+.md-fences.mock-cm { white-space: pre-wrap; }
+.show-fences-line-number .md-fences { padding-left: 0px; }
+.show-fences-line-number .md-fences.mock-cm { padding-left: 40px; }
+.footnotes { opacity: 0.8; font-size: 0.9rem; padding-top: 1em; padding-bottom: 1em; }
+.footnotes + .footnotes { margin-top: -1em; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; background: transparent; text-decoration: none; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; -webkit-tap-highlight-color: transparent; line-height: normal; font-weight: normal; text-align: left; box-sizing: content-box; direction: ltr; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li p, li .mathjax-block { margin: 0.5rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; }
+@media print {
+  html, body { height: 100%; }
+  .typora-export * { -webkit-print-color-adjust: exact; }
+  h1, h2, h3, h4, h5, h6 { break-after: avoid-page; orphans: 2; }
+  p { orphans: 4; }
+  html.blink-to-pdf { font-size: 13px; }
+  .typora-export #write { padding-left: 1cm; padding-right: 1cm; }
+  .typora-export #write::after { height: 0px; }
+  @page { margin: 20mm 0mm; }
+}
+.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
+a img, img a { cursor: pointer; }
+pre.md-meta-block { font-size: 0.8rem; min-height: 2.86rem; white-space: pre-wrap; background: rgb(204, 204, 204); display: block; overflow-x: hidden; }
+p .md-image:only-child { display: inline-block; width: 100%; text-align: center; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.mathjax-block { white-space: pre; overflow: hidden; width: 100%; }
+p + .mathjax-block { margin-top: -1.143rem; }
+.mathjax-block:not(:empty)::after { display: none; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus { outline: none; box-shadow: none; }
+.task-list { list-style-type: none; }
+.task-list-item { position: relative; padding-left: 1em; }
+.task-list-item input { position: absolute; top: 0px; left: 0px; }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-radius: 10px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc::after, .md-toc-content::after { display: none; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); text-decoration: none; }
+.md-toc-inner:hover { }
+.md-toc-inner { display: inline-block; cursor: pointer; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: bold; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+@media screen and (max-width: 48em) {
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
+}
+a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.md-attr { display: none; }
+.md-fn-count::after { content: "."; }
+.md-tag { opacity: 0.5; }
+.md-comment { color: rgb(162, 127, 3); opacity: 0.8; font-family: monospace; }
+code { text-align: left; }
+h1 .md-tag, h2 .md-tag, h3 .md-tag, h4 .md-tag, h5 .md-tag, h6 .md-tag { font-weight: initial; opacity: 0.35; }
+a.md-print-anchor { border-width: initial !important; border-style: none !important; border-color: initial !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: none !important; background: transparent !important; text-decoration: initial !important; text-shadow: initial !important; }
+.md-inline-math .MathJax_SVG .noError { display: none !important; }
+.mathjax-block .MathJax_SVG_Display { text-align: center; margin: 1em 0em; position: relative; text-indent: 0px; max-width: none; max-height: none; min-height: 0px; min-width: 100%; width: auto; display: block !important; }
+.MathJax_SVG_Display, .md-inline-math .MathJax_SVG_Display { width: auto; margin: inherit; display: inline-block !important; }
+.MathJax_SVG .MJX-monospace { font-family: monospace; }
+.MathJax_SVG .MJX-sans-serif { font-family: sans-serif; }
+.MathJax_SVG { display: inline; font-style: normal; font-weight: normal; line-height: normal; zoom: 90%; text-indent: 0px; text-align: left; text-transform: none; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; direction: ltr; max-width: none; max-height: none; min-width: 0px; min-height: 0px; border: 0px; padding: 0px; margin: 0px; }
+.MathJax_SVG * { transition: none; }
+
+
+@include-when-export url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext);
+
+/**
+ * css forked from https://github.com/GitbookIO/gitbook 
+ * www.gitbook.com
+ * Apache License
+ * https://github.com/GitbookIO/gitbook/blob/master/LICENSE
+ **/
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Open Sans Regular'),url('file:///C:%5CUsers%5CRio%5CAppData%5CRoaming%5CTypora%5Cthemes%5Cgithub%5C400.woff') format('woff')
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: normal;
+    src: local('Open Sans Italic'),url('file:///C:%5CUsers%5CRio%5CAppData%5CRoaming%5CTypora%5Cthemes%5Cgithub%5C400i.woff') format('woff')
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: bold;
+    src: local('Open Sans Bold'),url('file:///C:%5CUsers%5CRio%5CAppData%5CRoaming%5CTypora%5Cthemes%5Cgithub%5C700.woff') format('woff')
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: bold;
+    src: local('Open Sans Bold Italic'),url('file:///C:%5CUsers%5CRio%5CAppData%5CRoaming%5CTypora%5Cthemes%5Cgithub%5C700i.woff') format('woff')
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: "Open Sans","Clear Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+    color: rgb(51, 51, 51);
+    line-height: 1.6;
+}
+
+#write{
+    max-width: 860px;
+  	margin: 0 auto;
+  	padding: 20px 30px 40px 30px;
+	padding-top: 20px;
+    padding-bottom: 100px;
+}
+#write > ul:first-child,
+#write > ol:first-child{
+    margin-top: 30px;
+}
+
+body > *:first-child {
+    margin-top: 0 !important;
+}
+body > *:last-child {
+    margin-bottom: 0 !important;
+}
+a {
+    color: #4183C4;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    position: relative;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    line-height: 1.4;
+    cursor: text;
+}
+h1:hover a.anchor,
+h2:hover a.anchor,
+h3:hover a.anchor,
+h4:hover a.anchor,
+h5:hover a.anchor,
+h6:hover a.anchor {
+    /*background: url("file:///C:%5CUsers%5CRio%5CAppData%5CRoaming%5Cimages%5Cmodules%5Cstyleguide%5Cpara.png") no-repeat 10px center;*/
+    text-decoration: none;
+}
+h1 tt,
+h1 code {
+    font-size: inherit;
+}
+h2 tt,
+h2 code {
+    font-size: inherit;
+}
+h3 tt,
+h3 code {
+    font-size: inherit;
+}
+h4 tt,
+h4 code {
+    font-size: inherit;
+}
+h5 tt,
+h5 code {
+    font-size: inherit;
+}
+h6 tt,
+h6 code {
+    font-size: inherit;
+}
+h1 {
+    padding-bottom: .3em;
+    font-size: 2.25em;
+    line-height: 1.2;
+    border-bottom: 1px solid #eee;
+}
+h2 {
+   padding-bottom: .3em;
+    font-size: 1.75em;
+    line-height: 1.225;
+    border-bottom: 1px solid #eee;
+}
+h3 {
+    font-size: 1.5em;
+    line-height: 1.43;
+}
+h4 {
+    font-size: 1.25em;
+}
+h5 {
+    font-size: 1em;
+}
+h6 {
+   font-size: 1em;
+    color: #777;
+}
+p,
+blockquote,
+ul,
+ol,
+dl,
+table{
+    margin: 0.8em 0;
+}
+li>ol,
+li>ul {
+    margin: 0 0;
+}
+hr {
+    height: 4px;
+    padding: 0;
+    margin: 16px 0;
+    background-color: #e7e7e7;
+    border: 0 none;
+    overflow: hidden;
+    box-sizing: content-box;
+    border-bottom: 1px solid #ddd;
+}
+
+body > h2:first-child {
+    margin-top: 0;
+    padding-top: 0;
+}
+body > h1:first-child {
+    margin-top: 0;
+    padding-top: 0;
+}
+body > h1:first-child + h2 {
+    margin-top: 0;
+    padding-top: 0;
+}
+body > h3:first-child,
+body > h4:first-child,
+body > h5:first-child,
+body > h6:first-child {
+    margin-top: 0;
+    padding-top: 0;
+}
+a:first-child h1,
+a:first-child h2,
+a:first-child h3,
+a:first-child h4,
+a:first-child h5,
+a:first-child h6 {
+    margin-top: 0;
+    padding-top: 0;
+}
+h1 p,
+h2 p,
+h3 p,
+h4 p,
+h5 p,
+h6 p {
+    margin-top: 0;
+}
+li p.first {
+    display: inline-block;
+}
+ul,
+ol {
+    padding-left: 30px;
+}
+ul:first-child,
+ol:first-child {
+    margin-top: 0;
+}
+ul:last-child,
+ol:last-child {
+    margin-bottom: 0;
+}
+blockquote {
+    border-left: 4px solid #dddddd;
+    padding: 0 15px;
+    color: #777777;
+}
+blockquote blockquote {
+    padding-right: 0;
+}
+table {
+    padding: 0;
+    word-break: initial;
+}
+table tr {
+    border-top: 1px solid #cccccc;
+    background-color: white;
+    margin: 0;
+    padding: 0;
+}
+table tr:nth-child(2n) {
+    background-color: #f8f8f8;
+}
+table tr th {
+    font-weight: bold;
+    border: 1px solid #cccccc;
+    text-align: left;
+    margin: 0;
+    padding: 6px 13px;
+}
+table tr td {
+    border: 1px solid #cccccc;
+    text-align: left;
+    margin: 0;
+    padding: 6px 13px;
+}
+table tr th:first-child,
+table tr td:first-child {
+    margin-top: 0;
+}
+table tr th:last-child,
+table tr td:last-child {
+    margin-bottom: 0;
+}
+
+.CodeMirror-gutters {
+    border-right: 1px solid #ddd;
+}
+
+.md-fences,
+code,
+tt {
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+    border-radius: 3px;
+    padding: 0;
+    font-family: Consolas, "Liberation Mono", Courier, monospace;
+    padding: 2px 4px 0px 4px;
+    font-size: 0.9em;
+}
+
+.md-fences {
+    margin-bottom: 15px;
+    margin-top: 15px;
+    padding: 0.2em 1em;
+    padding-top: 8px;
+    padding-bottom: 6px;
+}
+.task-list{
+	padding-left: 0;
+}
+
+.task-list-item {
+	padding-left:32px;
+}
+
+.task-list-item input {
+  top: 3px;
+  left: 8px;
+}
+
+@media screen and (min-width: 914px) {
+    /*body {
+        width: 854px;
+        margin: 0 auto;
+    }*/
+}
+@media print {
+    html {
+        font-size: 13px;
+    }
+    table,
+    pre {
+        page-break-inside: avoid;
+    }
+    pre {
+        word-wrap: break-word;
+    }
+}
+
+.md-fences {
+	background-color: #f8f8f8;
+}
+#write pre.md-meta-block {
+	padding: 1rem;
+    font-size: 85%;
+    line-height: 1.45;
+    background-color: #f7f7f7;
+    border: 0;
+    border-radius: 3px;
+    color: #777777;
+    margin-top: 0 !important;
+}
+
+.mathjax-block>.code-tooltip {
+	bottom: .375rem;
+}
+
+#write>h3.md-focus:before{
+	left: -1.5625rem;
+	top: .375rem;
+}
+#write>h4.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h5.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h6.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+.md-image>.md-meta {
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-family: Consolas, "Liberation Mono", Courier, monospace;
+    padding: 2px 4px 0px 4px;
+    font-size: 0.9em;
+    color: inherit;
+}
+
+.md-tag{
+	color: inherit;
+}
+
+.md-toc { 
+    margin-top:20px;
+    padding-bottom:20px;
+}
+
+#typora-quick-open {
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+}
+
+#typora-quick-open-item {
+    background-color: #FAFAFA;
+    border-color: #FEFEFE #e5e5e5 #e5e5e5 #eee;
+    border-style: solid;
+    border-width: 1px;
+}
+
+#md-notification:before {
+    top: 10px;
+}
+
+/** focus mode */
+.on-focus-mode blockquote {
+    border-left-color: rgba(85, 85, 85, 0.12);
+}
+
+header, .context-menu, .megamenu-content, footer{
+    font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+
+</style>
+</head>
+<body class='typora-export' >
+<div  id='write'  class = 'is-node'><h2><a name='header-n3' class='md-header-anchor '></a>MySQL Notes</h2><h3><a name='header-n5' class='md-header-anchor '></a>Syntax</h3><h4><a name='header-n6' class='md-header-anchor '></a>Comments</h4><p>Either <code>--</code> for single-line comments or <code>/* */</code> for multiline comments.</p><h4><a name='header-n9' class='md-header-anchor '></a>Case</h4><p>mySQL commands are not case sensitive. However, it is recommended to use UPPERCASE for commands.</p><h4><a name='header-n12' class='md-header-anchor '></a>Semicolons</h4><p>Semicolons should be used to end a command.</p><h3><a name='header-n15' class='md-header-anchor '></a>Select/View</h3><pre class="md-fences md-end-block" lang="mysql"> <div class="CodeMirror cm-s-inner CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; min-height: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure">AخA</div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">SELECT</span> columnA[, columnB...] <span class="cm-keyword">FROM</span> tableName [<span class="cm-keyword">WHERE</span> <span class="cm-keyword">condition</span> [<span class="cm-keyword">AND</span> anotherCondition...]] [<span class="cm-keyword">ORDER</span> <span class="cm-keyword">BY</span> colA [<span class="cm-keyword">DESC</span>/ASC] [, colB [<span class="cm-keyword">DESC</span>/ASC]...]</span></pre></div></div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 0px;"></div><div class="CodeMirror-gutters" style="display: none; height: 77px;"></div></div></div></pre><p>You can also use the <code>SELECT</code> statement to perform calculations, such as <code>1+2</code>.</p><h3><a name='header-n19' class='md-header-anchor '></a>Distinct</h3><p>You can use the <code>DISTINCT</code> keyword to only select distinct or unique values: <code>SELECT DISTINCT colName FROM tableName</code></p><h3><a name='header-n22' class='md-header-anchor '></a>As</h3><p><code>SELECT columnA AS &#39;string&#39;</code> allows you to change the name of the column, referencing it using an alias.</p><p>If the string does not have spaces or other syntax, it does not need to be in single quotes, and can be referenced in that command:</p><pre class="md-fences md-end-block" lang="mysql"> <div class="CodeMirror cm-s-inner CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; min-height: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">SELECT</span> colA <span class="cm-keyword">AS</span> someText <span class="cm-keyword">FROM</span> tableName <span class="cm-keyword">ORDER</span> <span class="cm-keyword">BY</span> tableName</span></pre></div></div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 0px;"></div><div class="CodeMirror-gutters" style="display: none; height: 26px;"></div></div></div></pre><h3><a name='header-n28' class='md-header-anchor '></a>Regular Expressions</h3><pre class="md-fences md-end-block" lang="mysql"> <div class="CodeMirror cm-s-inner CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; min-height: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">SELECT</span> ... <span class="cm-keyword">WHERE</span> col <span class="cm-keyword">REGEXP</span> <span class="cm-string">'aRegExp'</span></span></pre></div></div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 0px;"></div><div class="CodeMirror-gutters" style="display: none; height: 26px;"></div></div></div></pre><h3><a name='header-n30' class='md-header-anchor '></a>Update Row:</h3><pre class="md-fences md-end-block" lang="mysql"> <div class="CodeMirror cm-s-inner CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; min-height: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">UPDATE</span> tableName <span class="cm-keyword">SET</span> <span class="cm-keyword">Column</span> = <span class="cm-keyword">Value</span> [<span class="cm-keyword">WHERE</span> Conditional]</span></pre></div></div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 0px;"></div><div class="CodeMirror-gutters" style="display: none; height: 26px;"></div></div></div></pre><h3><a name='header-n32' class='md-header-anchor '></a>Insert Row:</h3><pre class="md-fences md-end-block" lang="mysql"> <div class="CodeMirror cm-s-inner CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; min-height: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">INSERT</span> <span class="cm-keyword">INTO</span> tableName [(colA, colB, colD...)] <span class="cm-keyword">VALUES</span> (valA, valB, valD...)```</span></pre></div><pre class=""><span style="padding-right: 0.1px;">The <span class="cm-variable-2">`[(colA, colB, colD...)]`</span> <span class="cm-keyword">is</span> only necessary <span class="cm-keyword">if</span> <span class="cm-keyword">not</span> <span class="cm-keyword">all</span> <span class="cm-keyword">values</span> will be entered. </span></pre></div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 0px;"></div><div class="CodeMirror-gutters" style="display: none; height: 103px;"></div></div></div></pre><p>However, by using the statement below, you can insert rows from another table:</p><pre class="md-fences md-end-block" lang="mysql"> <div class="CodeMirror cm-s-inner CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; min-height: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">INSERT</span> <span class="cm-keyword">INTO</span> tableName(colA, colB, colC) <span class="cm-keyword">SELECT</span> <span class="cm-keyword">FROM</span> table2Name colJ, colD, colZ [<span class="cm-keyword">WHERE</span> Conditional]</span></pre></div></div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 0px;"></div><div class="CodeMirror-gutters" style="display: none; height: 51px;"></div></div></div></pre><h3><a name='header-n37' class='md-header-anchor '></a>Delete Row:</h3><pre class="md-fences md-end-block" lang="mysql"> <div class="CodeMirror cm-s-inner CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; min-height: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">DELETE</span> <span class="cm-keyword">FROM</span> tableName [<span class="cm-keyword">WHERE</span> Conditional]</span></pre></div></div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 0px;"></div><div class="CodeMirror-gutters" style="display: none; height: 26px;"></div></div></div></pre><h3><a name='header-n39' class='md-header-anchor '></a>Ordering SELECT statements:</h3><pre class="md-fences md-end-block" lang="mysql"> <div class="CodeMirror cm-s-inner CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; min-height: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><pre class=""><span style="padding-right: 0.1px;">... <span class="cm-keyword">ORDER</span> <span class="cm-keyword">BY</span> col1 [<span class="cm-keyword">ASC</span>/DESC], col2...</span></pre></div></div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 0px;"></div><div class="CodeMirror-gutters" style="display: none; height: 26px;"></div></div></div></pre><h3><a name='header-n41' class='md-header-anchor '></a>Limit</h3><pre class="md-fences md-end-block" lang="mysql"> <div class="CodeMirror cm-s-inner CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; min-height: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">SELECT</span> colA ... <span class="cm-keyword">FROM</span> tableName <span class="cm-keyword">LIMIT</span> n [<span class="cm-keyword">OFFSET</span> j]</span></pre></div></div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 0px;"></div><div class="CodeMirror-gutters" style="display: none; height: 26px;"></div></div></div></pre><p>This limits the query to <code>n</code> rows, and the optional <code>OFFSET</code> parameter means it returns <code>n</code> rows starting at the <code>j</code>th row.</p><h3><a name='header-n45' class='md-header-anchor '></a>Create Table:</h3><pre class="md-fences md-end-block" lang="mysql"> <div class="CodeMirror cm-s-inner CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; min-height: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">CREATE</span> <span class="cm-keyword">TABLE</span> tableName (</span></pre></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-tab">    </span>colA colType,</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  colB colType,</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  colC colType,</span></pre><pre class=""><span style="padding-right: 0.1px;">...);</span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-comment">/*No comma after the last one*/</span></span></pre></div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 0px;"></div><div class="CodeMirror-gutters" style="display: none; height: 155px;"></div></div></div></pre><p> This defines all the options for the table. Inside the brackets has the table definition for all the columns.</p><p>To set a column to an id, you can use the <code>SERIAL</code> keyword:</p><pre class="md-fences md-end-block" lang="mysql"> <div class="CodeMirror cm-s-inner CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; min-height: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><pre class=""><span style="padding-right: 0.1px;">...</span></pre></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-tab">    </span>id SERIAL,</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-comment">/* SERIAL = BIGINT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE */</span></span></pre><pre class=""><span style="padding-right: 0.1px;">...</span></pre></div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 0px;"></div><div class="CodeMirror-gutters" style="display: none; height: 130px;"></div></div></div></pre><h4><a name='header-n52' class='md-header-anchor '></a>Describe</h4><p><code>DESCRIBE tableName</code> is a mySQL specific command which outputs information about a table.</p><h3><a name='header-n55' class='md-header-anchor '></a>Delete Table:</h3><p><code>DROP TABLE tableName</code> You may want to use <code>DROP TABLE IF EXISTS tableName</code></p><h3><a name='header-n58' class='md-header-anchor '></a>Concatonating Strings:</h3><p>Just have a space between two strings (USE SINGLE QUOTES). For example, <code>SELECT &#39;Hello&#39; &#39; World&#39;</code> outputs <code>&quot;Hello World&quot;</code></p><h3><a name='header-n61' class='md-header-anchor '></a>Boolean Operators:</h3><p><code>&lt;&gt;</code> means is not equal to
+<code>=</code> means equal to
+<code>&gt;=</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&lt;</code> are the standard comparison operators
+<code>IS [NOT] NULL</code> tells you if a value is (not) null</p><h3><a name='header-n67' class='md-header-anchor '></a>Null</h3><p>Null is the lack of a value, and so you cannot compare or test. Thus, something like <code>SELECT * FROM tableName where colA = NULL</code> will not work. You must use <code>...WHERE colA IS [NOT] NULL</code>.</p><h3><a name='header-n70' class='md-header-anchor '></a>Databases</h3><p>This is very similar to with tables.</p><p>To create a database, use <code>CREATE DATABASE databaseName;</code></p><p>To delete: <code>DROP DATABASE databaseName;</code></p><p>To use a table in the database, you can use: <code>USE tableName;</code></p><h4><a name='header-n79' class='md-header-anchor '></a>SHOW TABLE STATUS</h4><p>The <code>SHOW TABLE STATUS;</code> command gives you information about all the tables in a database. You can use selectors such as <code>LIKE</code> to show information about some tables only. This command is MySQL specific.</p><p><code>SHOW CREATE TABLE tablename</code> is another command, which outputs the command mySQL used to create the table.</p><p><code>SHOW VARIABLES</code> is a command which shows internal mySQL variables.</p><h3><a name='header-n86' class='md-header-anchor '></a>Index</h3><p>To use a column as a index, use <code>INDEX(columnName)</code> or <code>INDEX indexName(columnName)</code> in the declaration of a table:</p><pre class="md-fences md-end-block" lang="mysql"> <div class="CodeMirror cm-s-inner CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; min-height: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">DROP</span> <span class="cm-keyword">TABLE</span> <span class="cm-keyword">IF</span> <span class="cm-keyword">EXISTS</span> tableName;</span></pre></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">CREATE</span> <span class="cm-keyword">TABLE</span> tableName (</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  id <span class="cm-builtin">INTEGER</span>,</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  a <span class="cm-builtin">VARCHAR</span>(<span class="cm-number">255</span>),</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  b <span class="cm-builtin">VARCHAR</span>(<span class="cm-number">255</span>),</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-keyword">INDEX</span> [nameForIndex](a)</span></pre><pre class=""><span style="padding-right: 0.1px;">);</span></pre></div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 0px;"></div><div class="CodeMirror-gutters" style="display: none; height: 180px;"></div></div></div></pre><p>A index can have unique or non-unique values, meaning that the value of the index is always unique.</p><h3><a name='header-n92' class='md-header-anchor '></a>Column Constraints/Behaviour</h3><p>In the table declaration, you can define the behaviour of columns.
+To disallow null values, use: <code>colName colType NOT NULL</code>. A error will occur if you try and insert a row with a null value.
+To give it a default value, use <code>colName colType DEFAULT defVal</code>
+Unique is the same as making a column a index: <code>colName colType UNIQUE</code>. However, a column could have multiple <code>NULL</code> values as null is not a value. Use <code>UNIQUE</code> along with <code>NOT NULL</code> in order to stop this.</p><h3><a name='header-n98' class='md-header-anchor '></a>ID</h3><p>A ID column must be set up to be <code>UNIQUE NOT NULL</code>. A <code>PRIMARY KEY</code> constraint has both of these, and being the <em>primary</em> key, there can only be one per table. To generate sequential values, use <code>AUTO_INCREMENT</code>. However, you can shortcut the <code>UNIQUE NOT NULL...</code> using the <code>SERIAL</code> data type, which expands to <code>BIGINT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE</code>:</p><pre class="md-fences md-end-block" lang="mysql"> <div class="CodeMirror cm-s-inner CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; min-height: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">CREATE</span> <span class="cm-keyword">TABLE</span> tableName(</span></pre></div><pre class=""><span style="padding-right: 0.1px;">id SERIAL,</span></pre><pre class=""><span style="padding-right: 0.1px;">...</span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">PRIMARY</span> <span class="cm-keyword">KEY</span>(id));</span></pre></div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 0px;"></div><div class="CodeMirror-gutters" style="display: none; height: 103px;"></div></div></div></pre><h3><a name='header-n102' class='md-header-anchor '></a>Foreign Key Constraints</h3><p>Often, you reference columns, such as the ID of other tables. However, errors can occur if a row you select does not exist. Thus, foreign key constraints exist:</p><pre class="md-fences md-end-block" lang="mysql"> <div class="CodeMirror cm-s-inner CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; min-height: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">CREATE</span> <span class="cm-keyword">TABLE</span> tableName(</span></pre></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-tab">    </span>colA type,</span></pre><pre class=""><span style="padding-right: 0.1px;">  <span class="cm-tab">  </span>colB type,</span></pre><pre class=""><span style="padding-right: 0.1px;">  <span class="cm-tab">  </span><span class="cm-keyword">FOREIGN</span> <span class="cm-keyword">KEY</span> (colInThisTable) <span class="cm-keyword">REFERENCES</span> tableName(colInOtherTable)</span></pre><pre class=""><span style="padding-right: 0.1px;">);</span></pre></div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 0px;"></div><div class="CodeMirror-gutters" style="display: none; height: 158px;"></div></div></div></pre><p>This means that in addition to disallowing <code>INSERT INTO</code> row creation into <code>tableName</code>, it can disallow modifications such as the removal of rows into another table if that row is referenced. In addition, <code>DROP TABLE</code> statements must be made in a specific order to prevent reference errors.</p><h3><a name='header-n108' class='md-header-anchor '></a>Alter table after definition</h3><h4><a name='header-n109' class='md-header-anchor '></a>Add Column</h4><p>You can add a column after the definition using:</p><pre class="md-fences md-end-block" lang="mysql"> <div class="CodeMirror cm-s-inner CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; min-height: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">ALTER</span> <span class="cm-keyword">TABLE</span> tableName <span class="cm-keyword">ADD</span> colName colType;</span></pre></div></div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 0px;"></div><div class="CodeMirror-gutters" style="display: none; height: 26px;"></div></div></div></pre><p>By default, it adds the column to the end. To specify the position, use:</p><pre class="md-fences md-end-block" lang="mysql"> <div class="CodeMirror cm-s-inner CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; min-height: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">ALTER</span> <span class="cm-keyword">TABLE</span> tableName <span class="cm-keyword">ADD</span> colName ColType [<span class="cm-keyword">AFTER</span> anotherCol]/[<span class="cm-keyword">FIRST</span>]</span></pre></div></div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 0px;"></div><div class="CodeMirror-gutters" style="display: none; height: 51px;"></div></div></div></pre><p>Also by default, all the values in the column are initialized to <code>NULL</code>. To change this, use:</p><pre class="md-fences md-end-block" lang="mysql"> <div class="CodeMirror cm-s-inner CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; min-height: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">ALTER</span> <span class="cm-keyword">TABLE</span> tableName <span class="cm-keyword">ADD</span> colName colType <span class="cm-keyword">DEFAULT</span> defVal</span></pre></div></div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 0px;"></div><div class="CodeMirror-gutters" style="display: none; height: 26px;"></div></div></div></pre><p>Anything after the <code>ALTER TABLE tableName</code> is the same as in a normal table definition.</p><h4><a name='header-n121' class='md-header-anchor '></a>Delete Column</h4><p>To delete a column, use the similar syntax of:</p><pre class="md-fences md-end-block" lang="mysql"> <div class="CodeMirror cm-s-inner CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; min-height: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">ALTER</span> <span class="cm-keyword">TABLE</span> tableName <span class="cm-keyword">DROP</span> colName;</span></pre></div></div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 0px;"></div><div class="CodeMirror-gutters" style="display: none; height: 26px;"></div></div></div></pre><p>Be warned that it will delete data.</p><h2><a name='header-n127' class='md-header-anchor '></a>Data types</h2><p>This differs across systems. For mySQL, there are three fundamental data types: Numeric, String, and Date/Time. There is a hard limit of 65535 bytes of storage per row.</p><h3><a name='header-n130' class='md-header-anchor '></a>Numeric</h3><h4><a name='header-n131' class='md-header-anchor '></a>Integer</h4><p>There are 5 types of integers, each with signed and unsigned. </p><table><thead><tr><th>Type</th><th>Storage (bytes)</th></tr></thead><tbody><tr><td>TINYINT</td><td>1</td></tr><tr><td>SMALLINT</td><td>2</td></tr><tr><td>MEDIUMINT</td><td>3</td></tr><tr><td>INTEGER/INT</td><td>4</td></tr><tr><td>BIGINT</td><td>8</td></tr></tbody></table><h4><a name='header-n153' class='md-header-anchor '></a>Decimal</h4><p>Used for fixed precision values: <code>DECIMAL(p, s)</code>. The <code>p</code> specifies the precision- the number of digits stored, both before and after the decimal point. the <code>s</code> specifies the scale: the position of the decimal point. <code>0</code> means there is no decimal point, <code>2</code> means 2 decimal places. For example, <code>123456.789</code> would be of type <code>DECIMAL(9,3)</code>. <code>DECIMAL</code> and <code>NUMERIC</code> are both accepted. By default, <code>DECIMAL</code> equals <code>DECIMAL(10,0)</code>, so can store a number such as <code>1234567890</code>.</p><h4><a name='header-n156' class='md-header-anchor '></a>Floating point</h4><table><thead><tr><th>Type</th><th style='text-align:left;' >Range</th><th>Number of bits</th></tr></thead><tbody><tr><td>FLOAT/REAL</td><td style='text-align:left;' >+/- 3.4e38</td><td>24</td></tr><tr><td>DOUBLE</td><td style='text-align:left;' >+/- 1.79e308</td><td>53</td></tr></tbody></table><h3><a name='header-n170' class='md-header-anchor '></a>Strings</h3><h4><a name='header-n171' class='md-header-anchor '></a>Character Strings</h4><p>There are two types, <code>CHAR(n)</code> and <code>VARCHAR(n)</code>. The first is a fixed length string, and if the string is less than <code>n</code> characters long, it is padded with spaces, which are removed when retrieved. The latter&#39;s <code>n</code> value specifies the maximum size of the string, which can store <code>n+1</code> characters.</p><h3><a name='header-n174' class='md-header-anchor '></a>Binary Strings</h3><p>Basically the same as character strings, which types <code>BINARY(n)</code> and <code>VARBINARY(n)</code>. However, they have no character set and use binary collation. The first of the two are padded with 0&#39;s instead of spaces, which are stripped when being removed.</p><h4><a name='header-n177' class='md-header-anchor '></a>Large Object Storage</h4><table><thead><tr><th>Type</th><th>Storage (bytes)</th></tr></thead><tbody><tr><td>TINYBLOB, TINYTEXT</td><td>up to 256 + 1</td></tr><tr><td>BLOB, TEXT</td><td>up to 65536 + 2</td></tr><tr><td>MEDIUMBLOB, MEDIUMTEXT</td><td>up to 16777216 + 3</td></tr><tr><td>LONGBLOB, LONGTEXT</td><td>up to 4294967296 + 4</td></tr></tbody></table><p>The size of these columns do not count against the hard limit as they are stored separately. <code>BLOB</code>&#39;s have no character set, which <code>TEXT</code>&#39;s do.</p><h3><a name='header-n196' class='md-header-anchor '></a>Date and time</h3><p>Standard SQL date-time format is <code>YYYY-MM-DD HH:MM:SS[.DECIMAL]</code>.</p><p>The <code>TIMESTAMP</code> type is one that is updated on the creation and update of a row. It is of date-time format, and sets itself to the value of <code>CURRENT_TIMESTAMP</code>, which has the current date and time.</p><h3><a name='header-n201' class='md-header-anchor '></a>Bit</h3><p>This is a datatype designed to use as little storage as possible. This specifies the number of bits: <code>BIT(n)</code>. Thus, the largest value it can store is <span class="MathJax_Preview"></span><span class="MathJax_SVG_Display" style="text-align: center;"><span class="MathJax_SVG" id="MathJax-Element-2-Frame" tabindex="-1" style="font-size: 100%; display: inline-block;"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="6.384ex" height="2.161ex" viewBox="0 -825.4 2748.6 930.3" role="img" focusable="false" style="vertical-align: -0.244ex;"><defs><path stroke-width="1" id="E2-MJMAIN-32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path><path stroke-width="1" id="E2-MJMATHI-6E" d="M21 287Q22 293 24 303T36 341T56 388T89 425T135 442Q171 442 195 424T225 390T231 369Q231 367 232 367L243 378Q304 442 382 442Q436 442 469 415T503 336T465 179T427 52Q427 26 444 26Q450 26 453 27Q482 32 505 65T540 145Q542 153 560 153Q580 153 580 145Q580 144 576 130Q568 101 554 73T508 17T439 -10Q392 -10 371 17T350 73Q350 92 386 193T423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 180T152 343Q153 348 153 366Q153 405 129 405Q91 405 66 305Q60 285 60 284Q58 278 41 278H27Q21 284 21 287Z"></path><path stroke-width="1" id="E2-MJMAIN-2212" d="M84 237T84 250T98 270H679Q694 262 694 250T679 230H98Q84 237 84 250Z"></path><path stroke-width="1" id="E2-MJMAIN-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#E2-MJMAIN-32" x="0" y="0"></use><use transform="scale(0.707)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#E2-MJMATHI-6E" x="707" y="583"></use><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#E2-MJMAIN-2212" x="1247" y="0"></use><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#E2-MJMAIN-31" x="2248" y="0"></use></g></svg></span></span><script type="math/tex; mode=display" id="MathJax-Element-2">2^n - 1</script>. If a value is greater than the maximum, it gets the value of the maximum. </p><h3><a name='header-n204' class='md-header-anchor '></a>Booleans</h3><p>The <code>BOOL</code> or <code>BOOLEAN</code> type maps to a <code>TINYINT</code>. It can have the value <code>TRUE</code> or <code>FALSE</code>, which maps to <code>1</code> or <code>0</code>.</p><h3><a name='header-n207' class='md-header-anchor '></a>Enumeration</h3><p><code>ENUM</code> is a list of strings, and can type one of the values specified:</p><pre class="md-fences md-end-block" lang="mysql"> <div class="CodeMirror cm-s-inner CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; min-height: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">DROP</span> <span class="cm-keyword">TABLE</span> <span class="cm-keyword">IF</span> <span class="cm-keyword">EXISTS</span> tableName;</span></pre></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">CREATE</span> <span class="cm-keyword">TABLE</span> tableName (</span></pre><pre class=""><span style="padding-right: 0.1px;">  colName <span class="cm-keyword">ENUM</span>(<span class="cm-string">'strA'</span>, <span class="cm-string">'strB'</span>, <span class="cm-string">'strC'</span>...)</span></pre><pre class=""><span style="padding-right: 0.1px;">);</span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">INSERT</span> <span class="cm-keyword">INTO</span> tableName (colName) <span class="cm-keyword">VALUES</span> (<span class="cm-string">'strA OR strB OR strC... BUT NOT ANYTHING ELSE'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">INSERT</span> <span class="cm-keyword">INTO</span> tableName (colName) <span class="cm-keyword">VALUES</span>(<span class="cm-number">1</span> <span class="cm-keyword">OR</span> <span class="cm-number">2</span> <span class="cm-keyword">OR</span> <span class="cm-number">3.</span>..);</span></pre></div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 0px;"></div><div class="CodeMirror-gutters" style="display: none; height: 180px;"></div></div></div></pre><p>Typing the string is the same as typing the index of of the string, starting at 1. It saves space as only an integer is stored.</p><h3><a name='header-n213' class='md-header-anchor '></a>Set</h3><p>A <code>SET</code> type is almost the same as <code>ENUM</code>, except that a cell can have more than one value in the list. Separate the values with a comma INSIDE the string:</p><pre class="md-fences md-end-block" lang="mysql"> <div class="CodeMirror cm-s-inner CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; min-height: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">DROP</span> <span class="cm-keyword">TABLE</span> <span class="cm-keyword">IF</span> <span class="cm-keyword">EXISTS</span> tableName;</span></pre></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">CREATE</span> <span class="cm-keyword">TABLE</span> tableName (</span></pre><pre class=""><span style="padding-right: 0.1px;">  colName <span class="cm-keyword">SET</span>(<span class="cm-string">'strA'</span>, <span class="cm-string">'strB'</span>, <span class="cm-string">'strC'</span>...)</span></pre><pre class=""><span style="padding-right: 0.1px;">);</span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">INSERT</span> <span class="cm-keyword">INTO</span> tableName (colName) <span class="cm-keyword">VALUES</span> (<span class="cm-string">'strA, strB...'</span>);</span></pre></div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 0px;"></div><div class="CodeMirror-gutters" style="display: none; height: 129px;"></div></div></div></pre><p>This can also be represented as a number. With <code>n</code> values, the maximum integer value for the <code>SET</code> will be <span class="MathJax_Preview"></span><span class="MathJax_SVG_Display" style="text-align: center;"><span class="MathJax_SVG" id="MathJax-Element-2-Frame" tabindex="-1" style="font-size: 100%; display: inline-block;"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="6.384ex" height="2.161ex" viewBox="0 -825.4 2748.6 930.3" role="img" focusable="false" style="vertical-align: -0.244ex;"><defs><path stroke-width="1" id="E2-MJMAIN-32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path><path stroke-width="1" id="E2-MJMATHI-6E" d="M21 287Q22 293 24 303T36 341T56 388T89 425T135 442Q171 442 195 424T225 390T231 369Q231 367 232 367L243 378Q304 442 382 442Q436 442 469 415T503 336T465 179T427 52Q427 26 444 26Q450 26 453 27Q482 32 505 65T540 145Q542 153 560 153Q580 153 580 145Q580 144 576 130Q568 101 554 73T508 17T439 -10Q392 -10 371 17T350 73Q350 92 386 193T423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 180T152 343Q153 348 153 366Q153 405 129 405Q91 405 66 305Q60 285 60 284Q58 278 41 278H27Q21 284 21 287Z"></path><path stroke-width="1" id="E2-MJMAIN-2212" d="M84 237T84 250T98 270H679Q694 262 694 250T679 230H98Q84 237 84 250Z"></path><path stroke-width="1" id="E2-MJMAIN-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#E2-MJMAIN-32" x="0" y="0"></use><use transform="scale(0.707)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#E2-MJMATHI-6E" x="707" y="583"></use><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#E2-MJMAIN-2212" x="1247" y="0"></use><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#E2-MJMAIN-31" x="2248" y="0"></use></g></svg></span></span><script type="math/tex; mode=display" id="MathJax-Element-2">2^n - 1</script>.</p><h3><a name='header-n219' class='md-header-anchor '></a>A Subset of String Functions</h3><h4><a name='header-n220' class='md-header-anchor '></a>Length</h4><p><code>LENGTH(str)</code> gives you the length of a string. Note that accented characters and other characters such as emoji may be longer than one character, as the 	LENGTH<code>function counts the number of bytes, and some characters take up more than one byte in UTF-8.</code></p><p>If you use <code>CHAR_LENGTH(str)</code>, it counts the number of characters. However, it will take a bit longer. <code>CHARACTER_LENGTH</code> is the same as <code>CHAR_LENGTH</code>. </p><h4><a name='header-n225' class='md-header-anchor '></a>Substring</h4><p>The <code>LEFT(str, n)</code> function gets the first <code>n</code> characters from a string. For example, <code>LEFT(&#39;Hello World&#39;, 4)</code> will return <code>Hell</code>.</p><p>The <code>RIGHT(str, n)</code> is similar, getting the last <code>n</code> characters. <code>RIGHT(&#39;Hello World&#39;, 4)</code> returns <code>orld</code>.</p><p><code>MID(str, n, o)</code> returns a string <code>o</code> characters long starting from the <code>n</code>th character. <code>MID(&#39;Hello World&#39;, 2, 4)</code> will return <code>ello</code>.</p><h4><a name='header-n232' class='md-header-anchor '></a>Concatenate</h4><p>The <code>CONCAT(strA, strB...)</code> function concatenates, or joins two or more strings together. The <code>CONCAT_WS(sep, strA, strB...)</code> concatenates two or more strings together with the <code>sep</code> string in between two strings.</p><h4><a name='header-n235' class='md-header-anchor '></a>Locate</h4><p>The <code>LOCATE(strA, strB)</code> function finds the location of <code>strA</code> in <code>strB</code>. For example, <code>LOCATE(&#39;Hello&#39;, &#39;ABCD Hello World&#39;)</code> will return <code>6</code> as the 6th character in <code>strB</code> is the start of the match. A value of <code>0</code> means there was no match, as it is not zero-indexed: the first character is <code>1</code>.</p><h4><a name='header-n238' class='md-header-anchor '></a>Miscellaneous functions</h4><p><code>UPPER(str)</code> and <code>LOWER(str)</code> return the upper and lower case values of a string. This also works for accented characters in UTF-8.</p><p>The <code>REVERSE(str)</code> reverses a string.</p><h3><a name='header-n243' class='md-header-anchor '></a>A Subset of Numeric Functions</h3><p><code>+, -, *</code> are some basic numeric operators. The <code>/</code> divides, returning a float, while the <code>DIV</code> keyword returns an integer.</p><p><code>MOD</code>, or <code>%</code> returns the remainder of a number.</p><p>To get the power, use <code>POWER(base, exp)</code> or <code>POW(base, exp)</code>, not <code>^</code>.</p><p>The absolute value function is <code>ABS(int)</code>. <code>SIGN</code> gives you the sign of a number, returning <code>-1</code> or <code>1</code> for negative or positive numbers.</p><p>The <code>CONV(valA, baseA, baseB)</code> converts a number, <code>valA</code> from <code>baseA</code> to <code>baseB</code>. The limit for the bases is from between base 2 and 36 (the number of alphanumeric characters).</p><p><code>PI()</code> returns pi</p><h4><a name='header-n256' class='md-header-anchor '></a>Rounding</h4><p><code>ROUND(n [, dp])</code> rounds to nearest whole number, or if the second argument is filled in, to the nearest <code>dp</code> decimal points.</p><p><code>TRUNCATE(n [,dp])</code> truncates, or effectively rounds down <code>n</code> to either a whole number or to <code>dp</code> decimal places.</p><p><code>CEIL(n)</code> and <code>FLOOR(n)</code> always rounds up or down respectively.</p><h4><a name='header-n263' class='md-header-anchor '></a>Random</h4><p>The <code>RAND()</code> returns a random number between 0 and 1. There is a optional parameter of a seed.</p><h3><a name='header-n266' class='md-header-anchor '></a>A Subset of Date and time functions</h3><h4><a name='header-n267' class='md-header-anchor '></a>Current timestamp</h4><p><code>NOW()</code> returns the current timestamp. This is equivalent to <code>CURRENT_TIMESTAMP[()]</code>. <code>UNIX_TIMESTAMP</code> gives the number of seconds since epoch.</p><h4><a name='header-n270' class='md-header-anchor '></a>Day of</h4><p>The function,  <code>DAYNAME(datetime)</code> returns a string representing the name of the day of the week.</p><p><code>DAYOFMONTH(datetime)</code> returns the day of the month</p><p><code>DAYOFWEEK(datetime)</code> returns an integer representing the day of the week. <code>2</code> is Monday.</p><p><code>DAYOFYEAR(datetime)</code> returns the number of days since January 1.</p><p><code>MONTHNAME(datetime)</code> returns a string representing the name of the month.</p><h4><a name='header-n281' class='md-header-anchor '></a>Modifying</h4><p><code>TIME_TO_SEC(datetime)</code> gives the number of seconds since midnight that day. The timestamp can be either date and time or just time.</p><p><code>SEC_TO_TIME(sec)</code> does the opposite, returning a time-only timestamp, which may be larger than 24 hours.</p><p><code>ADDTIME(datetime, time)</code> adds a datetime/time and time together, returning either a datetime or time value.</p><p><code>SUBTIME(datetime, time)</code> does the same, subtracting <code>time</code> from <code>datetime.</code> The result can be negative.</p><p><code>ADDDATE(date, INTERVAL n units)</code> adds <code>n</code> units to <code>date</code>. <code>n</code> can be negative.</p><p>The <code>INTERVAL</code> keyword can take the values of: <code>MICROSECOND, SECOND, MINUTE, HOUR, DAY, MONTH, QUARTER, YEAR</code>. <code>MICROSECOND</code> may not be supported, and note that everything is singular.</p><p><code>SUBDATE(date, INTERVAL n units)</code> does the same, except subtracting. It is essentially the same as <code>ADDDATE(date, INTERVAL -n units)</code>.</p><h4><a name='header-n296' class='md-header-anchor '></a>Time zones</h4><p><code>SET time_zone = tz_timezone e.g. &#39;Pacific/Auckland&#39;</code></p><p>This sets the session time zone setting.</p><h4><a name='header-n301' class='md-header-anchor '></a>Formatting dates</h4><p><code>DATE_FORMAT(datetime, &#39;str&#39;)</code> outputs a formatted string. The following options apply to the <code>str</code>:</p><table><thead><tr><th>Format</th><th>Description</th></tr></thead><tbody><tr><td><code>%a</code></td><td>Abbreviated weekday name (Sun-Sat)</td></tr><tr><td><code>%b</code></td><td>Abbreviated month name (Jan-Dec)</td></tr><tr><td><code>%c</code></td><td>Month, numeric (0-12)</td></tr><tr><td><code>%D</code></td><td>Day of month with English suffix (0th, 1st, 2nd, 3rd, 4th...)</td></tr><tr><td><code>%d</code></td><td>Day of month, numeric (00-31)</td></tr><tr><td><code>%e</code></td><td>Day of month, numeric (0-31)</td></tr><tr><td><code>%f</code></td><td>Microseconds (000000-999999)</td></tr><tr><td><code>%H</code></td><td>Hour (00-23)</td></tr><tr><td><code>%h</code></td><td>Hour (01-12)</td></tr><tr><td><code>%I</code></td><td>Hour (01-12)</td></tr><tr><td><code>%i</code></td><td>Minutes, numeric (00-59)</td></tr><tr><td><code>%j</code></td><td>Day of year (001-366)</td></tr><tr><td><code>%k</code></td><td>Hour (0-23)</td></tr><tr><td><code>%l</code></td><td>Hour (1-12)</td></tr><tr><td><code>%M</code></td><td>Month name (January-December)</td></tr><tr><td><code>%m</code></td><td>Month, numeric (00-12)</td></tr><tr><td><code>%p</code></td><td>AM or PM</td></tr><tr><td><code>%r</code></td><td>Time, 12-hour (hh:mm:ss followed by AM or PM)</td></tr><tr><td><code>%S</code></td><td>Seconds (00-59)</td></tr><tr><td><code>%s</code></td><td>Seconds (00-59)</td></tr><tr><td><code>%T</code></td><td>Time, 24-hour (hh:mm:ss)</td></tr><tr><td><code>%U</code></td><td>Week (00-53) where Sunday is the first day of week</td></tr><tr><td><code>%u</code></td><td>Week (00-53) where Monday is the first day of week</td></tr><tr><td><code>%V</code></td><td>Week (01-53) where Sunday is the first day of week, used with <code>%X</code></td></tr><tr><td><code>%v</code></td><td>Week (01-53) where Monday is the first day of week, used with <code>%x</code></td></tr><tr><td><code>%W</code></td><td>Weekday name (Sunday-Saturday)</td></tr><tr><td><code>%w</code></td><td>Day of the week (0=Sunday, 6=Saturday)</td></tr><tr><td><code>%X</code></td><td>Year for the week where Sunday is the first day of week, four digits, used with <code>%V</code></td></tr><tr><td><code>%x</code></td><td>Year for the week where Monday is the first day of week, four digits, used with <code>%v</code></td></tr><tr><td><code>%Y</code></td><td>Year, numeric, four digits</td></tr><tr><td><code>%y</code></td><td>Year, numeric, two digits</td></tr></tbody></table><p>Example: <code>DATE_FORMAT(NOW(), &#39;Currently %h:%i:%s%p, %W, %D of %M, %Y&#39;)</code></p><h3><a name='header-n403' class='md-header-anchor '></a>Aggregate Functions</h3><p>Functions which run across rows. Examples of these include the <code>COUNT(column)</code> functions, which counts the number of non-NULL values in a column, or <code>*</code> for the number of rows in a table. The <code>DISTINCT</code> tells you how many distinct values are in a column. Use it as <code>SELECT COUNT(DISTINCT column) FROM tableName.</code></p><p>The <code>GROUP BY</code> selector groups together elements with the same value in some column. This is often used in conjuction with aggregate functions. For example, one ould be: <code>SELECT SUM(columnA), columnB FROM tableName GROUP BY columnB;</code></p><p><code>GROUP_CONCAT([DISTINCT] colName [SEPARATOR &#39;sep&#39;])</code> is another function which concatonates the values of a column into a single string.</p><p><code>AVG(col)</code>, <code>MIN(col)</code>, <code>MAX(col)</code>, <code>STD(col)</code> (standard deviation) and <code>SUM(col)</code> are some other aggregate functions.</p><h3><a name='header-n412' class='md-header-anchor '></a>Conditional Expressions</h3><p>There are two similar syntaxes for a kind of if-else statement:</p><pre class="md-fences md-end-block" lang="mysql"> <div class="CodeMirror cm-s-inner CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; min-height: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">SELECT</span></span></pre></div><pre class=""><span style="padding-right: 0.1px;">  <span class="cm-keyword">CASE</span> <span class="cm-keyword">WHEN</span> boolExp <span class="cm-keyword">THEN</span> valA [<span class="cm-keyword">ELSE</span> valB] <span class="cm-keyword">END</span> [OTHER STUFF],</span></pre><pre class=""><span style="padding-right: 0.1px;">  <span class="cm-keyword">CASE</span> col <span class="cm-keyword">WHEN</span> someVal <span class="cm-keyword">THEN</span> valA [<span class="cm-keyword">ELSE</span> valB] <span class="cm-keyword">END</span> [<span class="cm-keyword">AS</span> alias...]</span></pre><pre class=""><span style="padding-right: 0.1px;">  <span class="cm-keyword">FROM</span> tableName</span></pre><pre class=""><span style="padding-right: 0.1px;">;</span></pre></div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 0px;"></div><div class="CodeMirror-gutters" style="display: none; height: 154px;"></div></div></div></pre><p>The column you change in the <code>THEN valA</code>/<code>ELSE valB</code> must be the referenced column in the boolean statement.</p><p>The <code>END</code> ends the conditional statement so that other stuff, such as alias etc. can be added. The 	<code>ELSE</code> is optional.</p><h3><a name='header-n420' class='md-header-anchor '></a>Transactions</h3><p>A transaction allows you to check that everything inside it is correct and can occur (i.e. adding non-unique value to a unique column) before either committing or rolling-back the table.</p><pre class="md-fences md-end-block" lang="mysql"> <div class="CodeMirror cm-s-inner CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; min-height: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">START</span> <span class="cm-keyword">TRANSACTION</span>;</span></pre></div><pre class=""><span style="padding-right: 0.1px;">...</span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">COMMIT</span> / <span class="cm-keyword">ROLLBACK</span>;</span></pre></div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 0px;"></div><div class="CodeMirror-gutters" style="display: none; height: 77px;"></div></div></div></pre><p>You can use a script to start some changes to a database, and if a error is returned or you are missing data, you can roll back changes to maintain the integrity of the database. Using transactions also increases the time taken for large changes.</p><h3><a name='header-n426' class='md-header-anchor '></a>Triggers</h3><p>A event that occurs when some behavior occurs in a table, such as when a row in another table is updated or inserted. For example:</p><pre class="md-fences md-end-block" lang="mysql"> <div class="CodeMirror cm-s-inner CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; min-height: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><pre class=""><span style="padding-right: 0.1px;">...</span></pre></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">CREATE</span> <span class="cm-keyword">TRIGGER</span> triggerName <span class="cm-keyword">AFTER</span> <span class="cm-keyword">INSERT</span> <span class="cm-keyword">ON</span> someTable</span></pre><pre class=""><span style="padding-right: 0.1px;"> <span class="cm-keyword">FOR</span> <span class="cm-keyword">EACH</span> <span class="cm-keyword">ROW</span> <span class="cm-comment">/*MySQL requires the FOR EACH ROW*/</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-keyword">UPDATE</span> otherTable <span class="cm-keyword">SET</span> colInOtherTable = NEW<span class="cm-variable-2">.colName</span> <span class="cm-keyword">WHERE</span> id = NEW<span class="cm-variable-2">.id</span> <span class="cm-comment">/*You probably have a column with the same ID that links the tables */</span></span></pre><pre class=""><span style="padding-right: 0.1px;">; </span></pre></div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 0px;"></div><div class="CodeMirror-gutters" style="display: none; height: 180px;"></div></div></div></pre><p>The <code>NEW</code> is a pseudo-table, or rather, a single row which points to the row that was updated or inserted. You can also use triggers to log changes. For example:</p><pre class="md-fences md-end-block" lang="mysql"> <div class="CodeMirror cm-s-inner CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; min-height: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><span><span>​</span>x</span></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">CREATE</span> <span class="cm-keyword">TABLE</span> log(id SERIAL, stamp <span class="cm-builtin">TIMESTAMP</span>, eventType <span class="cm-builtin">VARCHAR</span>(<span class="cm-number">255</span>), tableName <span class="cm-builtin">VARCHAR</span>(<span class="cm-number">255</span>), rowID <span class="cm-builtin">INT</span>);</span></pre></div><pre class=""><span style="padding-right: 0.1px;"><span>​</span></span></pre><pre class=""><span style="padding-right: 0.1px;">...</span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">CREATE</span> <span class="cm-keyword">TRIGGER</span> triggerName <span class="cm-keyword">AFTER</span> <span class="cm-keyword">INSERT</span> <span class="cm-keyword">ON</span> someTable</span></pre><pre class=""><span style="padding-right: 0.1px;">...</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp;  <span class="cm-keyword">INSERT</span> <span class="cm-keyword">INTO</span> log (eventType, tableName, rowID) <span class="cm-keyword">VALUES</span> (<span class="cm-string">'INSERT'</span>, <span class="cm-string">'someTable'</span>, NEW<span class="cm-variable-2">.id</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">...</span></pre></div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 0px;"></div><div class="CodeMirror-gutters" style="display: none; height: 231px;"></div></div></div></pre><p>The <code>TIMESTAMP</code> will be automatically created on the insert, so you have the time, table, row affected and type of change to the table. </p><p>You can also <code>DROP</code> triggers. However, if you drop the table associated with the trigger, that trigger is also automatically dropped. The command to <code>DROP</code> triggers is similar: <code>DROP TRIGGER [IF EXISTS] triggerName;</code></p><h3><a name='header-n437' class='md-header-anchor '></a>Preventing changes</h3><p>You can also use triggers to stop updates using <code>BEFORE UPDATE</code>.</p><pre class="md-fences md-end-block" lang="mysql"> <div class="CodeMirror cm-s-inner CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; min-height: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">CREATE</span> <span class="cm-keyword">TABLE</span> tableA(id SERIAL, ...);</span></pre></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">CREATE</span> <span class="cm-keyword">TABLE</span> tableB(id SERIAL, idForTableA <span class="cm-builtin">INT</span>, allowChanges <span class="cm-builtin">INT</span>...);</span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">INSERT</span> <span class="cm-keyword">INTO</span> tableB (..., allowChanges) <span class="cm-keyword">VALUES</span> (..., <span class="cm-number">0</span>); <span class="cm-comment">/*allowChanges is false*/</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span>​</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span>​</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">DELIMITER</span> // <span class="cm-comment">/*Allows the use of semicolons without terminating the statement. The delimiter is now '//' */</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">CREATE</span> <span class="cm-keyword">TRIGGER</span> triggerName <span class="cm-keyword">BEFORE</span> <span class="cm-keyword">UPDATE</span> <span class="cm-keyword">ON</span> tableA</span></pre><pre class=""><span style="padding-right: 0.1px;">  <span class="cm-keyword">FOR</span> <span class="cm-keyword">EACH</span> <span class="cm-keyword">ROW</span></span></pre><pre class=""><span style="padding-right: 0.1px;">  <span class="cm-keyword">BEGIN</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-keyword">IF</span> (<span class="cm-keyword">SELECT</span> allowChanges <span class="cm-keyword">FROM</span> tableB <span class="cm-keyword">WHERE</span> idForTableA = NEW<span class="cm-variable-2">.id</span>) = <span class="cm-number">0</span> <span class="cm-keyword">THEN</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp;  <span class="cm-comment">/*Get value of allowChanges where id in A equals id in B. If false, throw error*/</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp;  <span class="cm-keyword">SIGNAL</span> <span class="cm-keyword">SQLSTATE</span> <span class="cm-string">'45000'</span> <span class="cm-keyword">SET</span> <span class="cm-keyword">MESSAGE_TEXT</span> = <span class="cm-string">'Error messaeg'</span>; <span class="cm-comment">/*Error message which makes transaction fail*/</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-keyword">END</span> <span class="cm-keyword">IF</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;">  <span class="cm-keyword">END</span></span></pre><pre class=""><span style="padding-right: 0.1px;">// <span class="cm-comment">/*The statement is now terminated*/</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">DELIMITER</span>; <span class="cm-comment">/*Changes the terminator/delimiter back to a semicolon*/</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span>​</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">TRANSACTION</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">UPDATE</span> tableB <span class="cm-keyword">set</span> colA = otherVal <span class="cm-keyword">WHERE</span> id = someInt; //Will fail </span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">COMMIT</span>; <span class="cm-comment">/*Will not commit if there is an error*/</span></span></pre></div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 0px;"></div><div class="CodeMirror-gutters" style="display: none; height: 720px;"></div></div></div></pre><h3><a name='header-n441' class='md-header-anchor '></a>Subselects</h3><p>The result of a <code>SELECT</code> statement effectively returns a table. Thus, you can use a <code>SELECT</code> statement as a data source for another <code>SELECT</code> statement, called a subselect.</p><pre class="md-fences md-end-block" lang="mysql"> <div class="CodeMirror cm-s-inner CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; min-height: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">SELECT</span> sub<span class="cm-variable-2">.colA</span>, sub<span class="cm-variable-2">.ColB</span>, sub<span class="cm-variable-2">.colC</span> <span class="cm-keyword">FROM</span> (</span></pre></div><pre class=""><span style="padding-right: 0.1px;">  <span class="cm-keyword">SELECT</span> subX <span class="cm-keyword">As</span> colA, subY <span class="cm-keyword">AS</span> colB, subZ <span class="cm-keyword">AS</span> colC <span class="cm-keyword">FROM</span> tableName</span></pre><pre class=""><span style="padding-right: 0.1px;">) <span class="cm-keyword">AS</span> sub;</span></pre></div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 0px;"></div><div class="CodeMirror-gutters" style="display: none; height: 103px;"></div></div></div></pre><p>Inside the <code>()</code>, you have a select statement selecting three columns from the table, <code>tableName</code> and are calling the table generated from the <code>SELECT</code> as <code>sub</code>. Then the outer <code>SELECT</code> statement selects the three columns from the <code>sub</code> table.</p><p>You can also use subselects to select all columns where the id matches some criteria:</p><pre class="md-fences md-end-block" lang="mysql"> <div class="CodeMirror cm-s-inner CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; min-height: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">SELECT</span> * <span class="cm-keyword">FROM</span> tableName <span class="cm-keyword">WHERE</span> id <span class="cm-keyword">IN</span> </span></pre></div><pre class=""><span style="padding-right: 0.1px;">(<span class="cm-keyword">SELECT</span> <span class="cm-keyword">DISTINCT</span> idInTableName <span class="cm-keyword">FROM</span> anotherTable <span class="cm-keyword">WHERE</span> someCriteria);</span></pre></div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 0px;"></div><div class="CodeMirror-gutters" style="display: none; height: 77px;"></div></div></div></pre><p></p></div>
+</body>
+</html>

@@ -22,9 +22,13 @@ SELECT columnA[, columnB...] FROM tableName [WHERE condition [AND anotherConditi
 
 You can also use the `SELECT` statement to perform calculations, such as `1+2`.
 
+### Distinct
+
+You can use the `DISTINCT` keyword to only select distinct or unique values: `SELECT DISTINCT colName FROM tableName`
+
 ### As
 
-`SELECT columnA AS 'string'` allows you to change the name of the column.
+`SELECT columnA AS 'string'` allows you to change the name of the column, referencing it using an alias.
 
 If the string does not have spaces or other syntax, it does not need to be in single quotes, and can be referenced in that command:
 
@@ -32,24 +36,26 @@ If the string does not have spaces or other syntax, it does not need to be in si
 SELECT colA AS someText FROM tableName ORDER BY tableName
 ```
 
-
-
-### Regular Expression
+### Regular Expressions
 
 ```mysql
 SELECT ... WHERE col REGEXP 'aRegExp'
 ```
 
-###Update Row:
+### Update Row:
 ```mysql
 UPDATE tableName SET Column = Value [WHERE Conditional]
 ```
 
 ###Insert Row:
-`INSERT INTO tableName [(colA, colB, colD...)] VALUES (valA, valB, valD...)`. The `[(colA, colB, colD...)]` is only necessary if not all values will be entered, or if: 
-
-`INSERT INTO tableName(colA, colB, colC) SELECT FROM table2Name colJ, colD, colZ [WHERE Conditional]` allows you to insert rows from another table.
-
+```mysql
+INSERT INTO tableName [(colA, colB, colD...)] VALUES (valA, valB, valD...)```
+The `[(colA, colB, colD...)]` is only necessary if not all values will be entered. 
+```
+However, by using the statement below, you can insert rows from another table:
+```mysql
+INSERT INTO tableName(colA, colB, colC) SELECT FROM table2Name colJ, colD, colZ [WHERE Conditional]
+```
 ###Delete Row:
 ```mysql
 DELETE FROM tableName [WHERE Conditional]
@@ -81,11 +87,12 @@ CREATE TABLE tableName (
 
  This defines all the options for the table. Inside the brackets has the table definition for all the columns.
 
-To set a column to autoincrement, you can use the `SERIAL` keyword:
+To set a column to an id, you can use the `SERIAL` keyword:
 
 ```mysql
 ...
-	colA colType SERIAL,
+	id SERIAL,
+    /* SERIAL = BIGINT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE */
 ...
 ```
 
@@ -150,7 +157,13 @@ To give it a default value, use `colName colType DEFAULT defVal`
 Unique is the same as making a column a index: `colName colType UNIQUE`. However, a column could have multiple `NULL` values as null is not a value. Use `UNIQUE` along with `NOT NULL` in order to stop this.
 
 ###ID
-A ID column must be set up to be `UNIQUE NOT NULL`. A `PRIMARY KEY` constraint has both of these, and being the *primary* key, there can only be one per table. To generate sequential values for the ID, use `AUTO_INCREMENT PRIMARY KEY`
+A ID column must be set up to be `UNIQUE NOT NULL`. A `PRIMARY KEY` constraint has both of these, and being the *primary* key, there can only be one per table. To generate sequential values, use `AUTO_INCREMENT`. However, you can shortcut the `UNIQUE NOT NULL...` using the `SERIAL` data type, which expands to `BIGINT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE`:
+```mysql
+CREATE TABLE tableName(
+id SERIAL,
+...
+PRIMARY KEY(id));
+```
 
 ### Foreign Key Constraints
 
@@ -295,7 +308,7 @@ This can also be represented as a number. With `n` values, the maximum integer v
 
 #### Length
 
-`LENGTH(str)` gives you the length of a string. Note that accented characters and other characters such as emoji may be longer than one character, as the 	LENGTH` function counts the number of bytes, and some characters take up more than one byte in UTF-8.
+`LENGTH(str)` gives you the length of a string. Note that accented characters and other characters such as emoji may be longer than one character, as the 	LENGTH` function counts the number of bytes, and some characters take up more than one byte in UTF-8.`
 
 If you use `CHAR_LENGTH(str)`, it counts the number of characters. However, it will take a bit longer. `CHARACTER_LENGTH` is the same as `CHAR_LENGTH`. 
 
@@ -427,6 +440,114 @@ This sets the session time zone setting.
 
 Example: `DATE_FORMAT(NOW(), 'Currently %h:%i:%s%p, %W, %D of %M, %Y')`
 
-#### Aggregate Functions
+### Aggregate Functions
 
-Functions which run across rows. Examples of these include the `COUNT(column)` functions, which counts the number of non-NULL values in a column, or `*` for the number of rows in a table. `GROUP BY` modifies the `COUNT` function, grouping
+Functions which run across rows. Examples of these include the `COUNT(column)` functions, which counts the number of non-NULL values in a column, or `*` for the number of rows in a table. The `DISTINCT` tells you how many distinct values are in a column. Use it as `SELECT COUNT(DISTINCT column) FROM tableName.`
+
+The `GROUP BY` selector groups together elements with the same value in some column. This is often used in conjuction with aggregate functions. For example, one ould be: `SELECT SUM(columnA), columnB FROM tableName GROUP BY columnB;`
+
+`GROUP_CONCAT([DISTINCT] colName [SEPARATOR 'sep'])` is another function which concatonates the values of a column into a single string.
+
+`AVG(col)`, `MIN(col)`, `MAX(col)`, `STD(col)` (standard deviation) and `SUM(col)` are some other aggregate functions.
+
+### Conditional Expressions
+
+There are two similar syntaxes for a kind of if-else statement:
+
+```mysql
+SELECT
+  CASE WHEN boolExp THEN valA [ELSE valB] END [OTHER STUFF],
+  CASE col WHEN someVal THEN valA [ELSE valB] END [AS alias...]
+  FROM tableName
+;
+```
+
+The column you change in the `THEN valA`/`ELSE valB` must be the referenced column in the boolean statement.
+
+The `END` ends the conditional statement so that other stuff, such as alias etc. can be added. The 	`ELSE` is optional.
+
+### Transactions
+
+A transaction allows you to check that everything inside it is correct and can occur (i.e. adding non-unique value to a unique column) before either committing or rolling-back the table.
+
+```mysql
+START TRANSACTION;
+...
+COMMIT / ROLLBACK;
+```
+
+You can use a script to start some changes to a database, and if a error is returned or you are missing data, you can roll back changes to maintain the integrity of the database. Using transactions also increases the time taken for large changes.
+
+### Triggers
+
+A event that occurs when some behavior occurs in a table, such as when a row in another table is updated or inserted. For example:
+
+```mysql
+...
+CREATE TRIGGER triggerName AFTER INSERT ON someTable
+ FOR EACH ROW /*MySQL requires the FOR EACH ROW*/
+    UPDATE otherTable SET colInOtherTable = NEW.colName WHERE id = NEW.id /*You probably have a column with the same ID that links the tables */
+; 
+```
+
+The `NEW` is a pseudo-table, or rather, a single row which points to the row that was updated or inserted. You can also use triggers to log changes. For example:
+
+```mysql
+CREATE TABLE log(id SERIAL, stamp TIMESTAMP, eventType VARCHAR(255), tableName VARCHAR(255), rowID INT);
+
+...
+CREATE TRIGGER triggerName AFTER INSERT ON someTable
+...
+      INSERT INTO log (eventType, tableName, rowID) VALUES ('INSERT', 'someTable', NEW.id);
+...
+```
+
+The `TIMESTAMP` will be automatically created on the insert, so you have the time, table, row affected and type of change to the table. 
+
+You can also `DROP` triggers. However, if you drop the table associated with the trigger, that trigger is also automatically dropped. The command to `DROP` triggers is similar: `DROP TRIGGER [IF EXISTS] triggerName;`
+
+### Preventing changes 
+
+You can also use triggers to stop updates using `BEFORE UPDATE`.
+
+```mysql
+CREATE TABLE tableA(id SERIAL, ...);
+CREATE TABLE tableB(id SERIAL, idForTableA INT, allowChanges INT...);
+INSERT INTO tableB (..., allowChanges) VALUES (..., 0); /*allowChanges is false*/
+
+
+DELIMITER // /*Allows the use of semicolons without terminating the statement. The delimiter is now '//' */
+CREATE TRIGGER triggerName BEFORE UPDATE ON tableA
+  FOR EACH ROW
+  BEGIN
+    IF (SELECT allowChanges FROM tableB WHERE idForTableA = NEW.id) = 0 THEN
+      /*Get value of allowChanges where id in A equals id in B. If false, throw error*/
+      SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error messaeg'; /*Error message which makes transaction fail*/
+    END IF;
+  END
+// /*The statement is now terminated*/
+DELIMITER; /*Changes the terminator/delimiter back to a semicolon*/
+
+TRANSACTION;
+UPDATE tableB set colA = otherVal WHERE id = someInt; //Will fail 
+COMMIT; /*Will not commit if there is an error*/
+```
+### Subselects
+
+The result of a `SELECT` statement effectively returns a table. Thus, you can use a `SELECT` statement as a data source for another `SELECT` statement, called a subselect.
+
+```mysql
+SELECT sub.colA, sub.ColB, sub.colC FROM (
+  SELECT subX As colA, subY AS colB, subZ AS colC FROM tableName
+) AS sub;
+```
+
+Inside the `()`, you have a select statement selecting three columns from the table, `tableName` and are calling the table generated from the `SELECT` as `sub	`. Then the outer `SELECT` statement selects the three columns from the `sub` table.
+
+You can also use subselects to select all columns where the id matches some criteria:
+
+```mysql
+SELECT * FROM tableName WHERE id IN 
+(SELECT DISTINCT idInTableName FROM anotherTable WHERE someCriteria);
+```
+
