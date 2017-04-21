@@ -1,3 +1,3 @@
-# RobotC
+# Programming Notes
 
-A very long document on the workings of RobotC, C, and programming in general.
+Notes on some languages. Probably very bad.
