@@ -250,19 +250,17 @@ The size of these columns do not count against the hard limit as they are stored
 
 ### Date and time
 
-Standard SQL date-time format is `YYYY-MM-DD HH:MM:SS`.
+Standard SQL date-time format is `YYYY-MM-DD HH:MM:SS[.DECIMAL]`.
 
 The `TIMESTAMP` type is one that is updated on the creation and update of a row. It is of date-time format, and sets itself to the value of `CURRENT_TIMESTAMP`, which has the current date and time.
 
 ### Bit 
 
-This is a datatype designed to use as little storage as possible. This specifies the number of bits: `BIT(n)`. Thus, the largest value it can store is 2^n - 1. If a value is greater than the maximum, it gets the value of the maximum. 
+This is a datatype designed to use as little storage as possible. This specifies the number of bits: `BIT(n)`. Thus, the largest value it can store is $$2^n - 1$$. If a value is greater than the maximum, it gets the value of the maximum. 
 
 ### Booleans
 
 The `BOOL` or `BOOLEAN` type maps to a `TINYINT`. It can have the value `TRUE` or `FALSE`, which maps to `1` or `0`.
-
-
 
 ### Enumeration 
 
@@ -291,9 +289,9 @@ CREATE TABLE tableName (
 INSERT INTO tableName (colName) VALUES ('strA, strB...');
 ```
 
-This can also be represented as a number. With `n` values, the maximum integer value for the `SET` will be 2^n - 1.
+This can also be represented as a number. With `n` values, the maximum integer value for the `SET` will be $$2^n - 1$$.
 
-### String Functions
+### A Subset of String Functions
 
 #### Length
 
@@ -323,7 +321,7 @@ The `LOCATE(strA, strB)` function finds the location of `strA` in `strB`. For ex
 
 The `REVERSE(str)` reverses a string.
 
-### Numeric Functions
+### A Subset of Numeric Functions
 
 `+, -, *` are some basic numeric operators. The `/` divides, returning a float, while the `DIV` keyword returns an integer.
 
@@ -349,7 +347,7 @@ The `CONV(valA, baseA, baseB)` converts a number, `valA` from `baseA` to `baseB`
 
 The `RAND()` returns a random number between 0 and 1. There is a optional parameter of a seed.
 
-### Date and time functions
+### A Subset of Date and time functions
 
 #### Current timestamp
 
@@ -357,13 +355,78 @@ The `RAND()` returns a random number between 0 and 1. There is a optional parame
 
 #### Day of 
 
-The function,  `DAYNAME(timestamp)` returns a string representing the name of the day of the week.
+The function,  `DAYNAME(datetime)` returns a string representing the name of the day of the week.
 
-`DAYOFMONTH(timestamp)` returns the day of the month
+`DAYOFMONTH(datetime)` returns the day of the month
 
-`DAYOFWEEK(timestamp)` returns an integer representing the day of the week. `2` is Monday.
+`DAYOFWEEK(datetime)` returns an integer representing the day of the week. `2` is Monday.
 
-`DAYOFYEAR(timestamp)` returns the number of days since January 1.
+`DAYOFYEAR(datetime)` returns the number of days since January 1.
 
-`MONTHNAME(timestamp)` returns a string representing the name of the month.
+`MONTHNAME(datetime)` returns a string representing the name of the month.
 
+#### Modifying
+
+`TIME_TO_SEC(datetime)` gives the number of seconds since midnight that day. The timestamp can be either date and time or just time.
+
+`SEC_TO_TIME(sec)` does the opposite, returning a time-only timestamp, which may be larger than 24 hours.
+
+`ADDTIME(datetime, time)` adds a datetime/time and time together, returning either a datetime or time value.
+
+`SUBTIME(datetime, time)` does the same, subtracting `time` from `datetime.` The result can be negative.
+
+`ADDDATE(date, INTERVAL n units)` adds `n` units to `date`. `n` can be negative.
+
+The `INTERVAL` keyword can take the values of: `MICROSECOND, SECOND, MINUTE, HOUR, DAY, MONTH, QUARTER, YEAR`. `MICROSECOND` may not be supported, and note that everything is singular.
+
+`SUBDATE(date, INTERVAL n units)` does the same, except subtracting. It is essentially the same as `ADDDATE(date, INTERVAL -n units)`.
+
+#### Time zones
+
+`SET time_zone = tz_timezone e.g. 'Pacific/Auckland'`
+
+This sets the session time zone setting.
+
+#### Formatting dates
+
+`DATE_FORMAT(datetime, 'str')` outputs a formatted string. The following options apply to the `str`:
+
+| Format | Description                              |
+| ------ | ---------------------------------------- |
+| `%a`   | Abbreviated weekday name (Sun-Sat)       |
+| `%b`   | Abbreviated month name (Jan-Dec)         |
+| `%c`   | Month, numeric (0-12)                    |
+| `%D`   | Day of month with English suffix (0th, 1st, 2nd, 3rd, 4th...) |
+| `%d`   | Day of month, numeric (00-31)            |
+| `%e`   | Day of month, numeric (0-31)             |
+| `%f`   | Microseconds (000000-999999)             |
+| `%H`   | Hour (00-23)                             |
+| `%h`   | Hour (01-12)                             |
+| `%I`   | Hour (01-12)                             |
+| `%i`   | Minutes, numeric (00-59)                 |
+| `%j`   | Day of year (001-366)                    |
+| `%k`   | Hour (0-23)                              |
+| `%l`   | Hour (1-12)                              |
+| `%M`   | Month name (January-December)            |
+| `%m`   | Month, numeric (00-12)                   |
+| `%p`   | AM or PM                                 |
+| `%r`   | Time, 12-hour (hh:mm:ss followed by AM or PM) |
+| `%S`   | Seconds (00-59)                          |
+| `%s`   | Seconds (00-59)                          |
+| `%T`   | Time, 24-hour (hh:mm:ss)                 |
+| `%U`   | Week (00-53) where Sunday is the first day of week |
+| `%u`   | Week (00-53) where Monday is the first day of week |
+| `%V`   | Week (01-53) where Sunday is the first day of week, used with `%X` |
+| `%v`   | Week (01-53) where Monday is the first day of week, used with `%x` |
+| `%W`   | Weekday name (Sunday-Saturday)           |
+| `%w`   | Day of the week (0=Sunday, 6=Saturday)   |
+| `%X`   | Year for the week where Sunday is the first day of week, four digits, used with `%V` |
+| `%x`   | Year for the week where Monday is the first day of week, four digits, used with `%v` |
+| `%Y`   | Year, numeric, four digits               |
+| `%y`   | Year, numeric, two digits                |
+
+Example: `DATE_FORMAT(NOW(), 'Currently %h:%i:%s%p, %W, %D of %M, %Y')`
+
+#### Aggregate Functions
+
+Functions which run across rows. Examples of these include the `COUNT(column)` functions, which counts the number of non-NULL values in a column, or `*` for the number of rows in a table. `GROUP BY` modifies the `COUNT` function, grouping
