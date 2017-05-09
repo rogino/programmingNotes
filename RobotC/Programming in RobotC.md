@@ -111,6 +111,24 @@ $$
 $$
 The number cannot be represented as a decimal- it is recurring and would require an infinite amount of space to write in full. Such the same thing can happen with binary. Therefore, you should use integers when possible.
 
+### Aliases
+
+Aliases allow you to refer to a data type using a different string that you set. To set an alias, use the syntax:
+
+```C
+typedef originalName newName;
+```
+
+For example:
+
+```C
+/*A more useful way could be as so*/
+typedef const char* CCP; /*Const Char Pointer*/
+CCP characterConst = "Hello World";
+```
+
+As you can see, you can use it to shorten a specific datatype with specific attributes such as `const`, `unsigned`, or pointer. 
+
 ### Comments
 
 When writing code, other people, including your future self may not understand what code does. This is why you use comments, explaining what a piece of code does. This is why we have comments, which are sections of code ignored by the computer. 
