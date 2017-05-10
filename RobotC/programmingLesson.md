@@ -68,6 +68,24 @@ Currently, we have a range of `0 to 255`, but what if we want negatives, such as
 
 Computers can count up more than 255- in fact, this is a data type called a `char`. Usually, you will be dealing with `int`, which means integer, which in math, means a whole number. This has a much greater range, and is made by using more than one byte, but 2, 3, 4 or more bytes.
 
+# Syntax
+
+Computers are very picky about syntax. First, end statements/commands with a `;` semicolon. This includes:
+
+```C
+int variable = 10; //Declaring Variables
+variable *= 10; //Modifying variables. NB: *= is the same as variable = 10 * variable
+setMotorSpeed(126, 127); //After running functions
+
+//BUT NOT
+while(true) {
+  if (true) {
+    for(int i = 0; i < 100; i++) {
+      //Except for inside the () in for loops
+    }
+  }
+}
+```
 
 
 ## Booleans
@@ -192,22 +210,4 @@ This is much cleaner, easier to read, and shorter.
 
 
 
-# Syntax
-
-Computers are very picky about syntax. First, end statements/commands with a `;` semicolon. This includes:
-
-```C
-int variable = 10; //Declaring Variables
-variable *= 10; //Modifying variables. NB: *= is the same as variable = 10 * variable
-setMotorSpeed(126, 127); //After running functions
-
-//BUT NOT
-while(true) {
-  if (true) {
-    for(int i = 0; i < 100; i++) {
-      //Except for inside the () in for loops
-    }
-  }
-}
-```
 
