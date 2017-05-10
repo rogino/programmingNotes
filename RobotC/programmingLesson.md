@@ -189,3 +189,25 @@ setMotorSpeed(127, 127);
 ```
 
 This is much cleaner, easier to read, and shorter.
+
+
+
+# Syntax
+
+Computers are very picky about syntax. First, end statements/commands with a `;` semicolon. This includes:
+
+```C
+int variable = 10; //Declaring Variables
+variable *= 10; //Modifying variables. NB: *= is the same as variable = 10 * variable
+setMotorSpeed(126, 127); //After running functions
+
+//BUT NOT
+while(true) {
+  if (true) {
+    for(int i = 0; i < 100; i++) {
+      //Except for inside the () in for loops
+    }
+  }
+}
+```
+
